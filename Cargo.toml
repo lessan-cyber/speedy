@@ -1,0 +1,9 @@
+[package]
+name = "speedy"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.6.0", features = ["derive","suggestions","help","color"] }
+colored = "3.1.1"
+indicatif = "0.18.4"
