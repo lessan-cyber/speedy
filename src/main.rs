@@ -11,8 +11,8 @@ fn main() {
 
     match ping::measure_ping_and_jitter("8.8.8.8:53", 5) {
         Ok(stats) => {
-            println!("Average Ping: {:.3} ms", stats.average_ping);
-            println!("Average Jitter: {:.3} ms", stats.average_jitter);
+            println!("Average Ping: {:.2} ms", stats.average_ping);
+            println!("Average Jitter: {:.2} ms", stats.average_jitter);
         }
         Err(_) => {
             // Print to standard error instead of standard out
