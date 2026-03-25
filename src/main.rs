@@ -1,4 +1,5 @@
 mod cli;
+mod download;
 mod ping;
 
 use cli::Args;
@@ -24,4 +25,23 @@ fn main() {
             std::process::exit(1);
         }
     };
+
+    // -- DOWNLOAD TEST --
+    println!("Measuring download speed(this may take up to 10 seconds)...");
+    let download_url = "https://proof.ovh.net/files/100Mb.dat";
+    match download::measure_download_speed(download_url) {
+        Ok(stats) => {
+            let downloaded_mb = stats.bytes_downloaded as f64 / 1_048_576.0;
+            println!(
+                "Download: {:.2} Mbps (Downloaded {:.2} MB in {:.2} seconds)",
+                stats.mbps,
+                downloaded_mb,
+                stats.duration.as_secs_f64()
+            )
+        }
+        Err(e) => {
+            eprintln!("{} {}", "Download Error".red().bold(), e.red().bold());
+            std::process::exit(1);
+        }
+    }
 }
