@@ -1,6 +1,7 @@
 mod cli;
 mod download;
 mod ping;
+mod ui;
 
 use cli::Args;
 use colored::Colorize;
@@ -29,7 +30,7 @@ fn main() {
     // -- DOWNLOAD TEST --
     println!("Measuring download speed(this may take up to 10 seconds)...");
     let download_url = "https://proof.ovh.net/files/100Mb.dat";
-    match download::measure_download_speed(download_url) {
+    match download::measure_download_speed(download_url, args.simple) {
         Ok(stats) => {
             let downloaded_mb = stats.bytes_downloaded as f64 / 1_048_576.0;
             println!(
