@@ -56,3 +56,23 @@ pub fn measure_ping_and_jitter(host: &str, num_pings: u32) -> Result<PingStats, 
         average_jitter,
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_measure_ping_and_jitter_success() {
+        let result = measure_ping_and_jitter("8.8.8.8:53", 5);
+        assert!(result.is_ok());
+        let stats = result.unwrap();
+        assert!(stats.average_ping > 0.0);
+        assert!(stats.average_jitter >= 0.0);
+    }
+
+    #[test]
+    fn test_measure_ping_and_jitter_failure() {
+        let result = measure_ping_and_jitter("invalid.host:53", 5);
+        assert!(result.is_err());
+    }
+}
