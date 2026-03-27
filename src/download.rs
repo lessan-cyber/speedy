@@ -25,7 +25,8 @@ pub fn measure_download_speed(url: &str, is_simple: bool) -> Result<DownloadStat
     if !response.status().is_success() {
         return Err(format!("Failed to download file: {}", response.status()));
     }
-    let progress_bar = ui::create_progress_bar(max_duration, is_simple);
+    let max_duration = Duration::from_secs(10);
+    let progress_bar = ui::create_progress_bar(is_simple);
     let mut buffer = [0; 32 * 1024];
     let start = Instant::now();
     let mut bytes_downloaded = 0u64;
