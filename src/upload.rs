@@ -18,7 +18,7 @@ pub fn measure_upload_speed(
     let client = Client::new();
     let payload_size = (size_megabytes * 1_048_576) as usize;
     let max_duration = Duration::from_secs(10);
-    let progress_bar = ui::create_progress_bar(max_duration, is_simple);
+    let progress_bar = ui::create_progress_bar(is_simple);
 
     let start = Instant::now();
     let payload = vec![0u8; payload_size];
