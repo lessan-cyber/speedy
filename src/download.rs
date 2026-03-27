@@ -3,6 +3,7 @@ use reqwest::blocking::Client;
 use std::io::Read;
 use std::time::{Duration, Instant};
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct DownloadStats {
     pub mbps: f64,
     pub bytes_downloaded: u64,
