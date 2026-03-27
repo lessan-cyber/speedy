@@ -3,7 +3,7 @@ use std::time::Duration;
 
 /// Creates a duration-based progress bar (0-100%)
 /// Returns `None` if the user requests "simple" mode
-pub fn create_progress_bar(duration: Duration, is_simple: bool) -> Option<ProgressBar> {
+pub fn create_progress_bar(is_simple: bool) -> Option<ProgressBar> {
     if is_simple {
         return None;
     }
@@ -15,7 +15,7 @@ pub fn create_progress_bar(duration: Duration, is_simple: bool) -> Option<Progre
         .unwrap()
         .progress_chars("█>-"),
     );
-    pb.set_message(format!("{}s test", duration.as_secs()));
+    //pb.set_message(format!("{}s test", duration.as_secs()));
     Some(pb)
 }
 

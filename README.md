@@ -52,7 +52,7 @@ speedy --download-only --json
 
 ## Example Output
 
-```
+```test
 +-----------+-------------+-----------------+---------------+
 | Ping (ms) | Jitter (ms) | Download (Mbps) | Upload (Mbps) |
 +-----------+-------------+-----------------+---------------+
