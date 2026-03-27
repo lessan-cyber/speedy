@@ -12,7 +12,12 @@ pub struct DownloadStats {
 
 /// Measures download speed by pulling a file in a chunks for a maximum of 10 seconds.
 pub fn measure_download_speed(url: &str, is_simple: bool) -> Result<DownloadStats, String> {
-    let client = Client::new();
+    let max_duration = Duration::from_secs(10);
+    let client = Client::builder()
+        .connect_timeout(max_duration)
+        .timeout(max_duration)
+        .build()
+        .map_err(|e| format!("Failed to build HTTP client: {}", e))?;
     let mut response = client
         .get(url)
         .send()
