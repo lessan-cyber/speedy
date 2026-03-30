@@ -1,5 +1,7 @@
 use crate::ui;
 use reqwest::blocking::Client;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 #[derive(Debug)]
@@ -15,34 +17,52 @@ pub fn measure_upload_speed(
     size_megabytes: u64,
     is_simple: bool,
 ) -> Result<UploadStats, String> {
-    let client = Client::new();
+    let max_duration = Duration::from_secs(30);
+    let connect_timeout = Duration::from_secs(10);
+
+    let client = Client::builder()
+        .connect_timeout(connect_timeout)
+        .timeout(max_duration)
+        .build()
+        .map_err(|e| format!("Failed to create HTTP client: {}", e))?;
+
     let payload_size = (size_megabytes * 1_048_576) as usize;
-    let max_duration = Duration::from_secs(10);
+    let payload = vec![0u8; payload_size];
     let progress_bar = ui::create_progress_bar(is_simple);
 
     let start = Instant::now();
-    let payload = vec![0u8; payload_size];
+    let done = Arc::new(AtomicBool::new(false));
 
-    // Update progress in background while upload happens
+    // Progress thread - exits early when upload completes
     let progress_handle = {
         let pb = progress_bar.clone();
-        let max_dur = max_duration;
+        let done_flag = done.clone();
         std::thread::spawn(move || {
-            while start.elapsed() < max_dur {
-                ui::update_progress(&pb, start.elapsed(), max_dur);
+            while !done_flag.load(Ordering::Relaxed) && start.elapsed() < max_duration {
+                ui::update_progress(&pb, start.elapsed(), max_duration);
                 std::thread::sleep(Duration::from_millis(50));
             }
         })
     };
 
-    let response = client.post(url).body(payload).send();
+    // Perform upload
+    let response = client
+        .post(url)
+        .header("Content-Type", "application/octet-stream")
+        .body(payload)
+        .send()
+        .map_err(|e| format!("Failed to connect to upload server: {}", e))?;
 
+    // Signal progress thread to stop
+    done.store(true, Ordering::Relaxed);
     progress_handle.join().ok();
 
-    let response = response.map_err(|e| format!("Failed to connect to upload server: {}", e))?;
-
-    // Read response to completion
-    let _ = response.text();
+    // Check HTTP status - consume response to complete request
+    response
+        .error_for_status()
+        .map_err(|e| format!("Upload server error: {}", e))?
+        .bytes()
+        .ok();
 
     let elapsed = start.elapsed();
 
@@ -66,12 +86,13 @@ mod tests {
     use super::*;
 
     #[test]
+    #[ignore]
     fn test_measure_upload_speed() {
-        let result = measure_upload_speed("http://httpbin.org/post", 1, true);
+        let result = measure_upload_speed("https://speed.cloudflare.com/__up", 1, true);
         assert!(result.is_ok());
         let stats = result.unwrap();
         assert!(stats.mbps > 0.0);
         assert!(stats.bytes_uploaded > 0);
-        assert!(stats.duration < Duration::from_secs(10));
+        assert!(stats.duration < Duration::from_secs(30));
     }
 }
