@@ -1,4 +1,4 @@
-# speedy
+# Netpace
 
 A fast, terminal-based internet speed test CLI built in Rust.
 
@@ -17,28 +17,28 @@ A fast, terminal-based internet speed test CLI built in Rust.
 cargo build --release
 ```
 
-The binary will be at `target/release/speedy`.
+The binary will be at `target/release/netpace`.
 
 ## Usage
 
 ```bash
 # Run full speed test
-speedy
+netpace
 
 # Download only
-speedy --download-only
+netpace --download-only
 
 # Upload only
-speedy --upload-only
+netpace --upload-only
 
 # Simple mode (no progress bars)
-speedy --simple
+netpace --simple
 
 # JSON output
-speedy --json
+netpace --json
 
 # Combine flags
-speedy --download-only --json
+netpace --download-only --json
 ```
 
 ## Options

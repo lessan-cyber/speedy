@@ -1,12 +1,12 @@
 [package]
-name = "speed"
+name = "netpace"
 version = "0.1.0"
 edition = "2024"
 readme = "README.md"
 repository = "https://github.com/lessan-cyber/speedy"
 license = "MIT"
 categories = ["command-line-utilities", "networking","utility", "speed-test"]
-description = "Speed is a command-line tool for measuring network speed and performance.\nIt is built on top Cloudflare's Speed Test API.\nIt measures the ping, download, and upload speed of your network."
+description = "Netpace is a command-line tool for measuring network speed and performance.\nIt is built on top Cloudflare's Speed Test API.\nIt measures the ping, download, and upload speed of your network."
 [dependencies]
 clap = { version = "4.6.0", features = ["derive","suggestions","help","color"] }
 colored = "3.1.1"
