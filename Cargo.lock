@@ -893,6 +893,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "pulse"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "colored",
+ "indicatif",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "tabled",
+]
+
+[[package]]
 name = "quinn"
 version = "0.11.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1567,19 +1580,6 @@ name = "utf8parse"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
-
-[[package]]
-name = "veloce"
-version = "0.1.0"
-dependencies = [
- "clap",
- "colored",
- "indicatif",
- "reqwest",
- "serde",
- "serde_json",
- "tabled",
-]
 
 [[package]]
 name = "walkdir"
